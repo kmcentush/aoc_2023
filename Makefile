@@ -9,3 +9,7 @@ format:
 	ruff format .
 	ruff check . --fix
 	mypy . --ignore-missing-imports
+
+.PHONY: pytest
+pytest:
+	pytest --cov-report term-missing --cov=src tests/ -s
