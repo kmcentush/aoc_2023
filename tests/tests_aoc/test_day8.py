@@ -45,7 +45,21 @@ def test_puzzle2():
         22Z = (22B, 22B)
         XXX = (XXX, XXX)
     """
+    puzzle2 = """
+        LRL
+
+        11A = (11B, XXX)
+        11B = (11Z, 11Z)
+        11Z = (11B, XXX)
+        22A = (22B, XXX)
+        22B = (22C, 22C)
+        22C = (22Z, 22Z)
+        22Z = (22B, 22B)
+        XXX = (XXX, XXX)
+    """
 
     # Assert
     answer = p2.solve_puzzle(puzzle)
+    answer2 = p2.solve_puzzle(puzzle2)
     assert answer == 6
+    assert answer2 == 6

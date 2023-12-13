@@ -33,10 +33,9 @@ def navigate(directions: list[int], maps: dict[str, tuple[str, str]]):
         steps = 0
         location = start_location
         visited_locations = []
-        # TODO: keep track of directions; if we revisit but have a new sequence of instructions, we're OK to continue
-        while location not in visited_locations:  # break at a cycle
+        while (directions_idx, location) not in visited_locations:  # will break at a cycle
             # Mark visited
-            visited_locations.append(location)
+            visited_locations.append((directions_idx, location))
 
             # Maybe loop directions index
             if directions_idx > num_directions - 1:
