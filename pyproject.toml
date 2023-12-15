@@ -27,7 +27,8 @@ select = [
     # pyflakes
     "F",
     # pycodestyle
-    "E", "W",
+    "E",
+    "W",
     # flake8-2020
     "YTT",
     # flake8-bugbear
@@ -36,14 +37,10 @@ select = [
     "COM",
     # flake8-datetimez
     "DTZ",
-    # flake8-debugger
-    "T10",
-    # flake8-gettext
-    "INT",
     # flake8-quotes
     "Q",
     # pylint
-    "PL",
+    "PLE", "PLR", "PLW",
     # misc lints
     "PIE",
     # flake8-pyi
@@ -68,19 +65,24 @@ select = [
 ignore = [
     # module level import not at top of file
     "E402",
+    # too many branches
+    "PLR0912",
     # too many arguments to function call
     "PLR0913",
+    # too many statements in function
+    "PLR0915",
     # magic value used in comparison,
     "PLR2004",
     # do not use mutable data structures for argument defaults
     "B006",
     # recommended by Ruff to disable to avoid issues with formatter
     "COM812", "ISC001",
-    # too many branches
-    "PLR0912",
 ]
 per-file-ignores = {"__init__.py" = ["F401"]}
 target-version = "py310"
+
+[tool.ruff.lint.flake8-type-checking]
+quote-annotations = true
 
 [tool.coverage.report]
 # Regexes for lines to exclude from consideration
