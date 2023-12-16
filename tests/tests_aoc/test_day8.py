@@ -3,12 +3,6 @@ from aoc.day8 import puzzle as p
 
 def test_puzzle():
     # Define puzzles
-    puzzle = """
-        RL
-
-        AAA = (BBB, CCC)
-        CCC = (ZZZ, GGG)
-    """
     puzzle1 = """
         LLR
 
@@ -42,19 +36,16 @@ def test_puzzle():
     """
 
     # Test helpers
-    directions, maps = p.parse_puzzle(puzzle)
-    assert directions == [1, 0]
-    assert maps == {
-        "AAA": ("BBB", "CCC"),
-        "CCC": ("ZZZ", "GGG"),
-    }
+    directions, maps = p.parse_puzzle(puzzle1)
+    assert directions == [0, 0, 1]
+    assert maps == {"AAA": ("BBB", "BBB"), "BBB": ("AAA", "ZZZ"), "ZZZ": ("ZZZ", "ZZZ")}
 
     # Assert puzzle 1
-    answer = p.solve_puzzle1(puzzle1)
-    assert answer == 6
+    answer1 = p.solve_puzzle1(puzzle1)
+    assert answer1 == 6
 
     # Assert puzzle 2
-    answer = p.solve_puzzle2(puzzle2)
-    answer2 = p.solve_puzzle2(puzzle3)
-    assert answer == 6
+    answer2 = p.solve_puzzle2(puzzle2)
+    answer3 = p.solve_puzzle2(puzzle3)
     assert answer2 == 6
+    assert answer3 == 6
