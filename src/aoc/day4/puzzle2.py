@@ -2,7 +2,7 @@ import re
 from collections import defaultdict
 from copy import deepcopy
 
-from aoc.utils import multiline_input
+from aoc.utils import load_puzzle
 
 # Compile patterns
 CARD_PTRN = re.compile(r"Card +(\d+):")
@@ -52,5 +52,5 @@ def solve_puzzle(puzzle: str) -> int:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    puzzle = multiline_input()
-    solve_puzzle(puzzle)
+    puzzle = load_puzzle("puzzle.txt")
+    assert solve_puzzle(puzzle) == 9496801

@@ -3,7 +3,7 @@ import math
 import re
 from collections import defaultdict
 
-from aoc.utils import multiline_input
+from aoc.utils import load_puzzle
 
 # Compile patterns
 MAP_PTRN = re.compile(r"(\w+) = \((\w+), (\w+)\)")
@@ -65,5 +65,5 @@ def solve_puzzle(puzzle: str) -> int:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    puzzle = multiline_input()
-    solve_puzzle(puzzle)
+    puzzle = load_puzzle("puzzle.txt")
+    assert solve_puzzle(puzzle) == 13663968099527

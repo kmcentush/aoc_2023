@@ -1,6 +1,6 @@
 from collections import Counter
 
-from aoc.utils import multiline_input
+from aoc.utils import load_puzzle
 
 # Specify cards in descending rank order
 CARD_CHARS = "AKQJT98765432"
@@ -91,5 +91,5 @@ def solve_puzzle(puzzle: str) -> int:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    puzzle = multiline_input()
-    solve_puzzle(puzzle)
+    puzzle = load_puzzle("puzzle.txt")
+    assert solve_puzzle(puzzle) == 248559379

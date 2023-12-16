@@ -1,6 +1,6 @@
 import re
 
-from aoc.utils import multiline_input
+from aoc.utils import load_puzzle
 
 # Compile patterns
 DIGIT_PTRN = re.compile(r"\d+")
@@ -79,5 +79,5 @@ def solve_puzzle(puzzle: str) -> int:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    puzzle = multiline_input()
-    solve_puzzle(puzzle)
+    puzzle = load_puzzle("puzzle.txt")
+    assert solve_puzzle(puzzle) == 527144
