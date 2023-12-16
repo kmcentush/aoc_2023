@@ -91,7 +91,7 @@ def find_loop(start_node: tuple[int, int], graph: dict[tuple[int, int], list[tup
     return []
 
 
-def solve_puzzle(puzzle: str) -> int:
+def solve_puzzle1(puzzle: str) -> int:
     start_node, graph = parse_puzzle(puzzle)
     loop = find_loop(start_node, graph)
     answer = len(loop) // 2
@@ -101,4 +101,4 @@ def solve_puzzle(puzzle: str) -> int:
 
 if __name__ == "__main__":  # pragma: no cover
     puzzle = load_puzzle("puzzle.txt")
-    assert solve_puzzle(puzzle) == 7086
+    assert solve_puzzle1(puzzle) == 7086

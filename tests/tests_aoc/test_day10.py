@@ -1,9 +1,7 @@
-from aoc.day10 import puzzle1 as p1
-
-# from aoc.day10 import puzzle2 as p2
+from aoc.day10 import puzzle as p
 
 
-def test_puzzle1():
+def test_puzzle():
     # Define puzzles
     puzzle = """
         .....
@@ -20,8 +18,8 @@ def test_puzzle1():
         LJ.LJ
     """
 
-    # Assert
-    start_node, graph = p1.parse_puzzle(puzzle)
+    # Assert puzzle 1
+    start_node, graph = p.parse_puzzle(puzzle)
     assert start_node == (1, 1)
     assert graph == {
         (1, 2): [(1, 3), (1, 1)],
@@ -32,25 +30,9 @@ def test_puzzle1():
         (3, 2): [(3, 3), (3, 1)],
         (3, 3): [(2, 3), (3, 2)],
     }
-    loop = p1.find_loop(start_node, graph)
+    loop = p.find_loop(start_node, graph)
     assert loop == [(1, 1), (2, 1), (3, 1), (3, 2), (3, 3), (2, 3), (1, 3), (1, 2), (1, 1)]
-    answer = p1.solve_puzzle(puzzle)
-    assert answer == 4
-    answer2 = p1.solve_puzzle(puzzle2)
+    answer1 = p.solve_puzzle1(puzzle)
+    assert answer1 == 4
+    answer2 = p.solve_puzzle1(puzzle2)
     assert answer2 == 8
-
-
-# def test_puzzle2():
-#     # Define puzzle
-#     puzzle = """
-#         0 3 6 9 12 15
-#         1 3 6 10 15 21
-#         10 13 16 21 30 45
-#     """
-#
-#     # Assert
-#     sequences = p2.parse_puzzle(puzzle)
-#     next_vals = p2.find_previous(sequences)
-#     assert next_vals == [-3, 0, 5]
-#     answer = p2.solve_puzzle(puzzle)
-#     assert answer == 2
