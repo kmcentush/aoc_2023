@@ -23,10 +23,10 @@ def parse_puzzle(puzzle: str) -> tuple[list[int], dict[str, tuple[str, str]]]:
     return directions, maps
 
 
-def navigate(directions: list[int], maps: dict[str, tuple[str, str]]):
+def navigate(directions: list[int], maps: dict[str, tuple[str, str]], starts_suffix: str, ends_suffix: str) -> int:
     # Look for cycles
     num_directions = len(directions)
-    locations = [k for k in maps.keys() if k.endswith("A")]
+    locations = [k for k in maps.keys() if k.endswith(starts_suffix)]
     steps_to_z = defaultdict(list)
     for start_location in locations:
         directions_idx = 0
@@ -48,7 +48,7 @@ def navigate(directions: list[int], maps: dict[str, tuple[str, str]]):
             steps += 1
 
             # Mark Zs
-            if location.endswith("Z"):
+            if location.endswith(ends_suffix):
                 steps_to_z[start_location].append(steps)
 
     # Find the LCMs of all combinations of Z
@@ -57,13 +57,21 @@ def navigate(directions: list[int], maps: dict[str, tuple[str, str]]):
     return min(lcms)
 
 
-def solve_puzzle(puzzle: str) -> int:
+def solve_puzzle1(puzzle: str) -> int:
     directions, maps = parse_puzzle(puzzle)
-    answer = navigate(directions, maps)
+    answer = navigate(directions, maps, "AAA", "ZZZ")
+    print(f"Answer: {answer}")
+    return answer
+
+
+def solve_puzzle2(puzzle: str) -> int:
+    directions, maps = parse_puzzle(puzzle)
+    answer = navigate(directions, maps, "A", "Z")
     print(f"Answer: {answer}")
     return answer
 
 
 if __name__ == "__main__":  # pragma: no cover
     puzzle = load_puzzle("puzzle.txt")
-    assert solve_puzzle(puzzle) == 13663968099527
+    assert solve_puzzle1(puzzle) == 19199
+    assert solve_puzzle2(puzzle) == 13663968099527

@@ -1,39 +1,22 @@
-from aoc.day8 import puzzle1 as p1
-from aoc.day8 import puzzle2 as p2
+from aoc.day8 import puzzle as p
 
 
-def test_puzzle1():
-    # Test helpers
-    dummy_puzzle = """
+def test_puzzle():
+    # Define puzzles
+    puzzle = """
         RL
 
         AAA = (BBB, CCC)
         CCC = (ZZZ, GGG)
     """
-    directions, maps = p1.parse_puzzle(dummy_puzzle)
-    assert directions == [1, 0]
-    assert maps == {
-        "AAA": ("BBB", "CCC"),
-        "CCC": ("ZZZ", "GGG"),
-    }
-
-    # Define puzzle
-    puzzle = """
+    puzzle1 = """
         LLR
 
         AAA = (BBB, BBB)
         BBB = (AAA, ZZZ)
         ZZZ = (ZZZ, ZZZ)
     """
-
-    # Assert
-    answer = p1.solve_puzzle(puzzle)
-    assert answer == 6
-
-
-def test_puzzle2():
-    # Define puzzle
-    puzzle = """
+    puzzle2 = """
         LR
 
         11A = (11B, XXX)
@@ -45,7 +28,7 @@ def test_puzzle2():
         22Z = (22B, 22B)
         XXX = (XXX, XXX)
     """
-    puzzle2 = """
+    puzzle3 = """
         LRL
 
         11A = (11B, XXX)
@@ -58,8 +41,20 @@ def test_puzzle2():
         XXX = (XXX, XXX)
     """
 
-    # Assert
-    answer = p2.solve_puzzle(puzzle)
-    answer2 = p2.solve_puzzle(puzzle2)
+    # Test helpers
+    directions, maps = p.parse_puzzle(puzzle)
+    assert directions == [1, 0]
+    assert maps == {
+        "AAA": ("BBB", "CCC"),
+        "CCC": ("ZZZ", "GGG"),
+    }
+
+    # Assert puzzle 1
+    answer = p.solve_puzzle1(puzzle1)
+    assert answer == 6
+
+    # Assert puzzle 2
+    answer = p.solve_puzzle2(puzzle2)
+    answer2 = p.solve_puzzle2(puzzle3)
     assert answer == 6
     assert answer2 == 6
