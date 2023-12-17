@@ -37,24 +37,21 @@ def _find_arrangements(line: str, counts: tuple[int, ...]) -> int:
         return not has_holes
 
     # Handle completed groups
-    can_use = not has_holes and line[group_len] != "#"
-    if can_use:  # group is completed; next character must be a period, so we can skip over it
+    can_use = not has_holes and line[group_len] != "#"  # character after `group_len` is not "#"
+    if can_use:  # group is completed; next character must be a period, so we can recurse starting after that
         new_line = line[group_len + 1 : :].lstrip(".")
         used = _find_arrangements(new_line, counts[1::])
     else:
         used = 0
 
-    # Handle "#"
+    # Handle "#"; no more recursion needed
     if line[0] == "#":
         return used if can_use else 0
 
-    # Handle "?" and "."
+    # Handle "?" and "."; move one character over
     new_line = line[1::].lstrip(".")
     skip = _find_arrangements(new_line, counts)
-    if not can_use:
-        return skip
-    else:
-        return skip + used
+    return skip + used if can_use else skip
 
 
 def find_arrangements(lines: list[tuple[str, tuple[int, ...]]]) -> list[int]:
