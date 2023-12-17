@@ -18,43 +18,33 @@ def _parse_card(line: str) -> tuple[int, list[int], list[int]]:
     return card_id, winning_numbers, card_numbers
 
 
-def find_winners(puzzle: str) -> dict[int, list[int]]:
-    # Prepare to extract
-    puzzle = puzzle.strip()
-
-    # Find how many cards each win
+def find_winners(puzzle: str) -> dict[int, int]:
     cards = {}
-    for line in puzzle.splitlines():
+    for line in puzzle.strip().splitlines():
         card_id, winning_numbers, card_numbers = _parse_card(line)
         num_matches = 0
         for card_number in card_numbers:
             if card_number in winning_numbers:
                 num_matches += 1
-        cards[card_id] = [card_id + i + 1 for i in range(num_matches)]
+        cards[card_id] = num_matches
 
     return cards
 
 
-def score_winners1(cards: dict[int, list[int]]) -> list[int]:
-    numbers = []
-    for card_id, new_card_ids in cards.items():
-        if len(new_card_ids) > 0:
-            num_matches = new_card_ids[-1] - card_id
-            if num_matches > 0:
-                numbers.append(2 ** (num_matches - 1))
-    return numbers
+def score_winners1(cards: dict[int, int]) -> list[int]:
+    return [2 ** (num_matches - 1) for num_matches in cards.values() if num_matches > 0]
 
 
-def score_winners2(cards: dict[int, list[int]]) -> dict[int, int]:
-    # Count winners
-    orig_cards = deepcopy(cards)  # `cards` mutates in loops
+def score_winners2(cards: dict[int, int]) -> dict[int, int]:
+    cards_list = {card_id: [card_id + i + 1 for i in range(num_matches)] for card_id, num_matches in cards.items()}
+    orig_cards_list = deepcopy(cards_list)  # `cards_list` mutates in loops
     numbers: dict[int, int] = defaultdict(lambda: 0)
     for card_id in cards.keys():
         numbers[card_id] += 1
-        for new_card_id in cards[card_id]:
+        new_card_ids = cards_list[card_id]
+        for new_card_id in new_card_ids:
             numbers[new_card_id] += 1
-            cards[new_card_id] += orig_cards[new_card_id]
-
+            cards_list[new_card_id] += orig_cards_list[new_card_id]
     return numbers
 
 

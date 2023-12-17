@@ -18,7 +18,7 @@ def test_puzzle():
     assert winning_numbers == [41, 48, 83, 86, 17]
     assert card_numbers == [83, 86, 6, 31, 17, 9, 48, 53]
     cards = p.find_winners(puzzle)
-    assert cards == {1: [2, 3, 4, 5], 2: [3, 4], 3: [4, 5], 4: [5], 5: [], 6: []}
+    assert cards == {1: 4, 2: 2, 3: 2, 4: 1, 5: 0, 6: 0}
 
     # Assert puzzle 1
     numbers = p.score_winners1(cards)

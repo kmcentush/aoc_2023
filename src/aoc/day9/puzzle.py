@@ -7,9 +7,8 @@ DIGIT_PTRN = re.compile(r"-?\d+")  # support negative numbers
 
 
 def parse_puzzle(puzzle: str) -> list[list[int]]:
-    puzzle = puzzle.strip()
     sequences = []
-    for line in puzzle.splitlines():
+    for line in puzzle.strip().splitlines():
         line_strip = line.strip()
         sequence = [int(d) for d in DIGIT_PTRN.findall(line_strip)]
         sequences.append(sequence)

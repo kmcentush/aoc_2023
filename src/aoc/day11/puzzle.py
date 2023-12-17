@@ -3,10 +3,10 @@ from aoc.utils import load_puzzle
 
 def parse_puzzle(puzzle: str, empty_scale: int) -> list[tuple[int, int]]:
     # Find empty rows and columns
-    puzzle = puzzle.strip()
     valid_rows = []
     valid_cols = []
-    for row, line in enumerate(puzzle.splitlines()):
+    lines = puzzle.strip().splitlines()
+    for row, line in enumerate(lines):
         line_strip = line.strip()
         galaxy_cols = [pos for pos, char in enumerate(line_strip) if char == "#"]
         if len(galaxy_cols) > 0:
@@ -19,7 +19,7 @@ def parse_puzzle(puzzle: str, empty_scale: int) -> list[tuple[int, int]]:
     # Find galaxies
     galaxies = []
     extra_rows = 0
-    for row, line in enumerate(puzzle.splitlines()):
+    for row, line in enumerate(lines):
         # Skip empty rows
         if row in empty_rows:
             extra_rows += empty_scale - 1

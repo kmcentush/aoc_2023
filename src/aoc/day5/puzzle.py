@@ -15,9 +15,8 @@ def _explode_range(range_info: list[int], map_dict: dict[tuple[int, int], int]) 
 
 
 def parse_puzzle1(puzzle: str) -> tuple[list[int], dict[str, dict[tuple[int, int], int]]]:
-    puzzle = puzzle.strip()
     maps: dict[str, dict[tuple[int, int], int]] = defaultdict(lambda: {})
-    for line in puzzle.splitlines():
+    for line in puzzle.strip().splitlines():
         line_strip = line.strip()
         map_match = MAP_PTRN.match(line_strip)
         if line.startswith("seeds: "):
@@ -37,9 +36,8 @@ def _explode_range_inverse(range_info: list[int], map_dict: dict[tuple[int, int]
 
 
 def parse_puzzle2(puzzle: str) -> tuple[list[tuple[int, int]], dict[str, dict[tuple[int, int], int]]]:
-    puzzle = puzzle.strip()
     inverse_maps: dict[str, dict[tuple[int, int], int]] = defaultdict(lambda: {})
-    for line in puzzle.splitlines():
+    for line in puzzle.strip().splitlines():
         line_strip = line.strip()
         map_match = MAP_PTRN.match(line_strip)
         if line.startswith("seeds: "):

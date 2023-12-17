@@ -10,8 +10,7 @@ CARD_CHARS2 = "AKQT98765432J"
 def parse_puzzle(puzzle: str) -> tuple[list[str], list[int]]:
     hands = []
     bids = []
-    puzzle = puzzle.strip()
-    for line in puzzle.splitlines():
+    for line in puzzle.strip().splitlines():
         line_strip = line.strip()
         split = line_strip.split(" ")
         hand = split[0]

@@ -11,8 +11,7 @@ MAP_PTRN = re.compile(r"(\w+) = \((\w+), (\w+)\)")
 
 def parse_puzzle(puzzle: str) -> tuple[list[int], dict[str, tuple[str, str]]]:
     maps = {}
-    puzzle = puzzle.strip()
-    for line in puzzle.splitlines():
+    for line in puzzle.strip().splitlines():
         line_strip = line.strip()
         map_match = MAP_PTRN.match(line_strip)
         if map_match:
