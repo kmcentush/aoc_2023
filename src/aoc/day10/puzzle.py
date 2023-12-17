@@ -20,7 +20,7 @@ def _pipe_to_nodes(pipe: str, node: tuple[int, int]) -> list[tuple[int, int]]:
     return [(node[0] + step[0], node[1] + step[1]) for step in PIPE_MAP[pipe]]
 
 
-def parse_puzzle(puzzle: str) -> tuple[tuple[int, int], dict[tuple[int, int], list[tuple[int, int]]]]:
+def parse_puzzle(puzzle: str) -> tuple[tuple[int, int], dict[tuple[int, int], list[tuple[int, int]]], tuple[int, int]]:
     puzzle = puzzle.strip()
     graph: dict[tuple[int, int], list[tuple[int, int]]] = defaultdict(list)
     lines = puzzle.splitlines()
@@ -33,7 +33,8 @@ def parse_puzzle(puzzle: str) -> tuple[tuple[int, int], dict[tuple[int, int], li
                 graph[node] += next_nodes
             if pipe == "S":
                 start_node = node
-    return start_node, graph
+    grid_size = (row + 1, col + 1)
+    return start_node, graph, grid_size
 
 
 def _find_path(
@@ -68,7 +69,9 @@ def _find_path(
     return []
 
 
-def find_loop(start_node: tuple[int, int], graph: dict[tuple[int, int], list[tuple[int, int]]]):
+def find_loop(
+    start_node: tuple[int, int], graph: dict[tuple[int, int], list[tuple[int, int]]]
+) -> list[tuple[int, int]]:
     # Try S as all other types of pipes
     other_pipes = sorted(set(PIPE_MAP.keys()) - {"S", "."})
     loops = []
@@ -91,10 +94,49 @@ def find_loop(start_node: tuple[int, int], graph: dict[tuple[int, int], list[tup
     return []
 
 
+def _is_inside(point: tuple[int, int], polygon: list[tuple[int, int]]):
+    # Based on: https://en.wikipedia.org/wiki/Even%E2%80%93odd_rule
+    crosses = 0
+    for i in range(len(polygon) - 1):
+        poly1, poly2 = polygon[i], polygon[i + 1]
+        if ((poly1[1] > point[1]) != (poly2[1] > point[1])) and (
+            point[0] < (poly2[0] - poly1[0]) * (point[1] - poly1[1]) / (poly2[1] - poly1[1]) + poly1[0]
+        ):
+            crosses += 1
+
+    return crosses % 2 == 1
+
+
+def find_enclosed(loop: list[tuple[int, int]], grid_size: tuple[int, int]) -> list[tuple[int, int]]:
+    # Get all nodes not in the loop
+    all_nodes = []
+    for i in range(grid_size[0]):
+        for j in range(grid_size[1]):
+            all_nodes.append((i, j))
+    maybe_enclosed = sorted(set(all_nodes) - set(loop))
+
+    # Use ray tracing to determine if the node lies within the loop
+    enclosed = []
+    for node in maybe_enclosed:
+        if _is_inside(node, loop):
+            enclosed.append(node)
+
+    return enclosed
+
+
 def solve_puzzle1(puzzle: str) -> int:
-    start_node, graph = parse_puzzle(puzzle)
+    start_node, graph, grid_size = parse_puzzle(puzzle)
     loop = find_loop(start_node, graph)
     answer = len(loop) // 2
+    print(f"Answer: {answer}")
+    return answer
+
+
+def solve_puzzle2(puzzle: str) -> int:
+    start_node, graph, grid_size = parse_puzzle(puzzle)
+    loop = find_loop(start_node, graph)
+    enclosed = find_enclosed(loop, grid_size)
+    answer = len(enclosed)
     print(f"Answer: {answer}")
     return answer
 
@@ -102,3 +144,4 @@ def solve_puzzle1(puzzle: str) -> int:
 if __name__ == "__main__":  # pragma: no cover
     puzzle = load_puzzle("puzzle.txt")
     assert solve_puzzle1(puzzle) == 7086
+    assert solve_puzzle2(puzzle) == 317

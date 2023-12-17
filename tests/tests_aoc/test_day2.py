@@ -16,10 +16,10 @@ def test_puzzle():
     extract2 = p._extract_min_counts("Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red")
     assert extract1 == (2, 1, 3, 4)
     assert extract2 == (3, 20, 13, 6)
-
-    # Assert puzzle 1
     counts = p.extract_min_counts(puzzle)
     assert counts == {1: (4, 2, 6), 2: (1, 3, 4), 3: (20, 13, 6), 4: (14, 3, 15), 5: (6, 3, 2)}
+
+    # Assert puzzle 1
     answer1 = p.solve_puzzle1(puzzle)
     assert answer1 == 8
 
