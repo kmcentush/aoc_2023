@@ -1,34 +1,27 @@
-from aoc.day6 import puzzle1 as p1
-from aoc.day6 import puzzle2 as p2
+from aoc.day6 import puzzle as p
 
 
-def test_puzzle1():
+def test_puzzle():
     # Define puzzle
     puzzle = """
         Time:      7  15   30
         Distance:  9  40  200
     """
 
-    # Assert
-    times, distances = p1.parse_puzzle(puzzle)
-    assert times == [7, 15, 30]
-    assert distances == [9, 40, 200]
-    numbers = p1.extract_numbers(times, distances)
-    assert numbers == [4, 8, 9]
-    answer = p1.solve_puzzle(puzzle)
-    assert answer == 288
+    # Test helpers
+    times1, distances1 = p.parse_puzzle1(puzzle)
+    assert times1 == [7, 15, 30]
+    assert distances1 == [9, 40, 200]
+    numbers1 = p.extract_numbers(times1, distances1)
+    assert numbers1 == [4, 8, 9]
+    times2, distances2 = p.parse_puzzle2(puzzle)
+    assert times2 == [71530]
+    assert distances2 == [940200]
 
+    # Assert puzzle 1
+    answer1 = p.solve_puzzle1(puzzle)
+    assert answer1 == 288
 
-def test_puzzle2():
-    # Define puzzle
-    puzzle = """
-            Time:      7  15   30
-            Distance:  9  40  200
-        """
-
-    # Assert
-    time, distance = p2.parse_puzzle(puzzle)
-    assert time == 71530
-    assert distance == 940200
-    answer = p2.solve_puzzle(puzzle)
-    assert answer == 71503
+    # Assert puzzle 2
+    answer2 = p.solve_puzzle2(puzzle)
+    assert answer2 == 71503
