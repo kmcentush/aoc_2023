@@ -20,13 +20,23 @@ def _count_arrangement(line: str) -> list[int]:
     return [len(s) for s in splits]
 
 
+def _next_paths(path: str, line: str) -> list[str]:
+    path_len = len(path)
+    remaining = line[path_len::]
+    if "?" in remaining:
+        idx = remaining.index("?")
+        prefix = path + remaining[0:idx]
+        return [prefix + "#", prefix + "."]
+    return [path + remaining]
+
+
 def _find_arrangements(line: str, counts: list[int]) -> list[str]:
     # Use breadth-first-search
     arrangements = []
     line_len = len(line)
     counts_len = len(counts)
     explored = []
-    queue = [line[0]] if line[0] != "?" else ["#", "."]
+    queue = _next_paths("", line)
     while queue:
         # Get node
         path = queue.pop(0)
@@ -36,8 +46,7 @@ def _find_arrangements(line: str, counts: list[int]) -> list[str]:
             continue
 
         # Get next node(s)
-        next_char = line[len(path)]
-        next_paths = [path + next_char] if next_char != "?" else [path + "#", path + "."]
+        next_paths = _next_paths(path, line)
         for next_path in next_paths:
             # Ensure still possibly correct
             next_path_len = len(next_path)
@@ -75,15 +84,24 @@ def find_arrangements(lines: list[tuple[str, list[int]]]) -> list[list[str]]:
     return arrangements
 
 
-def solve_puzzle1(puzzle: str) -> int:
+def _solve_puzzle(puzzle: str, copies: int) -> int:
     lines = parse_puzzle(puzzle)
+    # TODO: use `copies` and be smart; all but last group of original pattern won't change
     arrangements = find_arrangements(lines)
     answer = sum([len(a) for a in arrangements])
     print(f"Answer: {answer}")
     return answer
 
 
+def solve_puzzle1(puzzle: str) -> int:
+    return _solve_puzzle(puzzle, copies=1)
+
+
+def solve_puzzle2(puzzle: str) -> int:
+    return _solve_puzzle(puzzle, copies=5)
+
+
 if __name__ == "__main__":  # pragma: no cover
     puzzle = load_puzzle("puzzle.txt")
-    assert solve_puzzle1(puzzle)
+    assert solve_puzzle1(puzzle) == 7379
     # assert solve_puzzle2(puzzle) == 731244261352
