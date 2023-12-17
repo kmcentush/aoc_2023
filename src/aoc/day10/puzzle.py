@@ -44,7 +44,7 @@ def _find_path(
     queue = [[start_node]]
     while queue:
         # Get node
-        path = queue.pop(0)
+        path = queue.pop(0)  # first index -> breadth-first
         node = path[-1]
 
         # OK to revisit nodes since we're checking both directions

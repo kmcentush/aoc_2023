@@ -1,4 +1,5 @@
 import re
+from functools import cache
 
 from aoc.utils import load_puzzle
 
@@ -6,89 +7,68 @@ from aoc.utils import load_puzzle
 DIGIT_PTRN = re.compile(r"(\d+)")
 
 
-def parse_puzzle(puzzle: str) -> list[tuple[str, list[int]]]:
+def parse_puzzle(puzzle: str) -> list[tuple[str, tuple[int, ...]]]:
     lines = []
     for line in puzzle.strip().splitlines():
         split = line.strip().split(" ")
         counts = [int(d) for d in DIGIT_PTRN.findall(split[1])]
-        lines.append((split[0], counts))
+        lines.append((split[0], tuple(counts)))
     return lines
 
 
-def _count_arrangement(line: str) -> list[int]:
-    splits = line.replace(".", " ").split()
-    return [len(s) for s in splits]
-
-
-def _next_paths(path: str, line: str) -> list[str]:
-    path_len = len(path)
-    remaining = line[path_len::]
-    if "?" in remaining:
-        idx = remaining.index("?")
-        prefix = path + remaining[0:idx]
-        return [prefix + "#", prefix + "."]
-    return [path + remaining]
-
-
-def _find_arrangements(line: str, counts: list[int]) -> list[str]:
-    # Use breadth-first-search
-    arrangements = []
-    line_len = len(line)
+@cache
+def _find_arrangements(line: str, counts: tuple[int, ...]) -> int:
+    # Handle no more groups
     counts_len = len(counts)
-    explored = []
-    queue = _next_paths("", line)
-    while queue:
-        # Get node
-        path = queue.pop(0)
+    if counts_len == 0:
+        return "#" not in line
 
-        # Don't revisit nodes nor explore longer paths
-        if path in explored:
-            continue
+    # Ensure enough possible combinations
+    # (I don't fully understand this...)
+    line_len = len(line)
+    if line_len - sum(counts) - len(counts) + 1 < 0:
+        return 0
 
-        # Get next node(s)
-        next_paths = _next_paths(path, line)
-        for next_path in next_paths:
-            # Ensure still possibly correct
-            next_path_len = len(next_path)
-            next_counts = _count_arrangement(next_path)  # need to count next_path
-            next_counts_len = len(next_counts)
-            if next_counts_len > counts_len:  # too many groups
-                continue
-            elif next_counts_len < counts_len and next_path_len < line_len:  # earlier groups too long
-                should_continue = False
-                for i in range(next_counts_len):
-                    if next_counts[i] > counts[i]:
-                        should_continue = True
-                        break
-                if should_continue:
-                    continue
+    # Check current group
+    group_len = counts[0]
+    group_len_chars = line[0:group_len]
+    has_holes = any(c == "." for c in group_len_chars)
+    if line_len == group_len:
+        return not has_holes
 
-            # Maybe add path to queue
-            if next_path_len < line_len:
-                queue.append(next_path)
+    # Handle completed groups
+    can_use = not has_holes and line[group_len] != "#"
+    if can_use:  # group is completed; next character must be a period, so we can skip over it
+        new_line = line[group_len + 1 : :].lstrip(".")
+        used = _find_arrangements(new_line, counts[1::])
+    else:
+        used = 0
 
-            # Include if correct
-            if next_path_len == line_len and next_counts == counts:
-                arrangements.append(next_path)
+    # Handle "#"
+    if line[0] == "#":
+        return used if can_use else 0
 
-        # Mark node as explored
-        explored.append(path)
-
-    return arrangements
+    # Handle "?" and "."
+    new_line = line[1::].lstrip(".")
+    skip = _find_arrangements(new_line, counts)
+    if not can_use:
+        return skip
+    else:
+        return skip + used
 
 
-def find_arrangements(lines: list[tuple[str, list[int]]]) -> list[list[str]]:
+def find_arrangements(lines: list[tuple[str, tuple[int, ...]]]) -> list[int]:
     arrangements = []
-    for line, digits in lines:
-        arrangements.append(_find_arrangements(line, digits))
+    for line, counts in lines:
+        arrangements.append(_find_arrangements(line, counts))
     return arrangements
 
 
 def _solve_puzzle(puzzle: str, copies: int) -> int:
     lines = parse_puzzle(puzzle)
-    # TODO: use `copies` and be smart; all but last group of original pattern won't change
+    lines = [("?".join([v[0]] * copies), v[1] * copies) for v in lines]
     arrangements = find_arrangements(lines)
-    answer = sum([len(a) for a in arrangements])
+    answer = sum(arrangements)
     print(f"Answer: {answer}")
     return answer
 
@@ -104,4 +84,4 @@ def solve_puzzle2(puzzle: str) -> int:
 if __name__ == "__main__":  # pragma: no cover
     puzzle = load_puzzle("puzzle.txt")
     assert solve_puzzle1(puzzle) == 7379
-    # assert solve_puzzle2(puzzle) == 731244261352
+    assert solve_puzzle2(puzzle) == 7732028747925
