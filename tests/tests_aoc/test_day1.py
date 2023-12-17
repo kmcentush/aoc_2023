@@ -1,30 +1,15 @@
-from aoc.day1 import puzzle1 as p1
-from aoc.day1 import puzzle2 as p2
+from aoc.day1 import puzzle as p
 
 
 def test_puzzle1():
     # Define puzzle
-    puzzle = """
+    puzzle1 = """
         1abc2
         pqr3stu8vwx
         a1b2c3d4e5f
         treb7uchet
     """
-
-    # Assert
-    numbers = p1.extract_numbers(puzzle)
-    assert numbers == [12, 38, 15, 77]
-    answer = p1.solve_puzzle(puzzle)
-    assert answer == 142
-
-
-def test_puzzle2():
-    # Assert helpers
-    digits_str = p2._str_to_digits("eightwo1three4")
-    assert digits_str == "82134"
-
-    # Define puzzle
-    puzzle = """
+    puzzle2 = """
         two1nine
         eightwothree
         abcone2threexyz
@@ -34,8 +19,18 @@ def test_puzzle2():
         7pqrstsixteen
     """
 
-    # Assert
-    numbers = p2.extract_numbers(puzzle)
-    assert numbers == [29, 83, 13, 24, 42, 14, 76]
-    answer = p2.solve_puzzle(puzzle)
-    assert answer == 281
+    # Test helpers
+    digits_str = p._str_to_digits("eightwo1three4")
+    assert digits_str == "82134"
+
+    # Assert puzzle 1
+    numbers1 = p.extract_numbers(puzzle1, convert_str=False)
+    assert numbers1 == [12, 38, 15, 77]
+    answer1 = p.solve_puzzle1(puzzle1)
+    assert answer1 == 142
+
+    # Assert puzzle 2
+    numbers2 = p.extract_numbers(puzzle2, convert_str=True)
+    assert numbers2 == [29, 83, 13, 24, 42, 14, 76]
+    answer2 = p.solve_puzzle2(puzzle2)
+    assert answer2 == 281
