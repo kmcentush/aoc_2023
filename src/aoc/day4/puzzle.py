@@ -18,7 +18,7 @@ def _parse_card(line: str) -> tuple[int, list[int], list[int]]:
     return card_id, winning_numbers, card_numbers
 
 
-def extract_numbers(puzzle: str) -> dict[int, int]:
+def find_winners(puzzle: str) -> dict[int, list[int]]:
     # Prepare to extract
     puzzle = puzzle.strip()
 
@@ -32,6 +32,20 @@ def extract_numbers(puzzle: str) -> dict[int, int]:
                 num_matches += 1
         cards[card_id] = [card_id + i + 1 for i in range(num_matches)]
 
+    return cards
+
+
+def score_winners1(cards: dict[int, list[int]]) -> list[int]:
+    numbers = []
+    for card_id, new_card_ids in cards.items():
+        if len(new_card_ids) > 0:
+            num_matches = new_card_ids[-1] - card_id
+            if num_matches > 0:
+                numbers.append(2 ** (num_matches - 1))
+    return numbers
+
+
+def score_winners2(cards: dict[int, list[int]]) -> dict[int, int]:
     # Count winners
     orig_cards = deepcopy(cards)  # `cards` mutates in loops
     numbers: dict[int, int] = defaultdict(lambda: 0)
@@ -44,8 +58,17 @@ def extract_numbers(puzzle: str) -> dict[int, int]:
     return numbers
 
 
-def solve_puzzle(puzzle: str) -> int:
-    numbers = extract_numbers(puzzle)
+def solve_puzzle1(puzzle: str) -> int:
+    winners = find_winners(puzzle)
+    numbers = score_winners1(winners)
+    answer = sum(numbers)
+    print(f"Answer: {answer}")
+    return answer
+
+
+def solve_puzzle2(puzzle: str) -> int:
+    winners = find_winners(puzzle)
+    numbers = score_winners2(winners)
     answer = sum(numbers.values())
     print(f"Answer: {answer}")
     return answer
@@ -53,4 +76,5 @@ def solve_puzzle(puzzle: str) -> int:
 
 if __name__ == "__main__":  # pragma: no cover
     puzzle = load_puzzle("puzzle.txt")
-    assert solve_puzzle(puzzle) == 9496801
+    assert solve_puzzle1(puzzle) == 27845
+    assert solve_puzzle2(puzzle) == 9496801

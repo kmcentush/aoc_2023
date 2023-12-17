@@ -1,50 +1,40 @@
-from aoc.day3 import puzzle1 as p1
-from aoc.day3 import puzzle2 as p2
+from aoc.day3 import puzzle as p
 
 
-def test_puzzle1():
-    # Assert helpers
-    matches = p1._find_matches("..35..633.")
+def test_puzzle():
+    # Define puzzle
+    puzzle = """
+        467..114..
+        ...*......
+        ..35..633.
+        ......#...
+        617*......
+        .....+.58.
+        ..592.....
+        ......755.
+        ...$.*....
+        .664.598..
+    """
+
+    # Test helpers
+    matches = p._find_matches("..35..633.")
     assert matches == [(2, "35"), (6, "633")]
 
-    # Define puzzle
-    puzzle = """
-        467..114..
-        ...*......
-        ..35..633.
-        ......#...
-        617*......
-        .....+.58.
-        ..592.....
-        ......755.
-        ...$.*....
-        .664.598..
-    """
+    # Assert puzzle 1
+    symbols1 = p.extract_symbols(puzzle, p.VALID_SYMBOLS1)
+    assert symbols1 == {
+        (1, 3): [467, 35],
+        (3, 6): [633],
+        (4, 3): [617],
+        (5, 5): [592],
+        (8, 5): [755, 598],
+        (8, 3): [664],
+    }
+    answer1 = p.solve_puzzle1(puzzle)
+    assert answer1 == 4361
 
-    # Assert
-    numbers = p1.extract_numbers(puzzle)
-    assert numbers == [467, 35, 633, 617, 592, 755, 664, 598]
-    answer = p1.solve_puzzle(puzzle)
-    assert answer == 4361
-
-
-def test_puzzle2():
-    # Define puzzle
-    puzzle = """
-        467..114..
-        ...*......
-        ..35..633.
-        ......#...
-        617*......
-        .....+.58.
-        ..592.....
-        ......755.
-        ...$.*....
-        .664.598..
-    """
-
-    # Assert
-    numbers = p2.extract_numbers(puzzle)
-    assert numbers == [16345, 451490]
-    answer = p2.solve_puzzle(puzzle)
-    assert answer == 467835
+    # Assert puzzle 2
+    symbols2 = p.extract_symbols(puzzle, p.VALID_SYMBOLS2)
+    assert symbols2 == {(1, 3): [467, 35], (4, 3): [617], (8, 5): [755, 598]}
+    answer2 = p.solve_puzzle2(puzzle)
+    assert answer2 == 467835
