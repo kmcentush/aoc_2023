@@ -24,8 +24,7 @@ def _extract_min_counts(line: str) -> tuple[int, int, int, int]:
 
 def extract_min_counts(puzzle: str) -> dict[int, tuple[int, int, int]]:
     counts = {}
-    puzzle = puzzle.strip()
-    for line in puzzle.splitlines():
+    for line in puzzle.strip().splitlines():
         game_id, red_count, green_count, blue_count = _extract_min_counts(line)
         counts[game_id] = (red_count, green_count, blue_count)
 

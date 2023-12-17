@@ -8,8 +8,7 @@ DIGIT_PTRN = re.compile(r"\d+")
 
 
 def parse_puzzle1(puzzle: str) -> tuple[list[int], list[int]]:
-    puzzle = puzzle.strip()
-    for line in puzzle.splitlines():
+    for line in puzzle.strip().splitlines():
         line_strip = line.strip()
         if line_strip.startswith("Time: "):
             times = [int(d) for d in DIGIT_PTRN.findall(line_strip)]
@@ -19,7 +18,6 @@ def parse_puzzle1(puzzle: str) -> tuple[list[int], list[int]]:
 
 
 def parse_puzzle2(puzzle: str) -> tuple[list[int], list[int]]:
-    puzzle = puzzle.strip()
     for line in puzzle.splitlines():
         line_strip = line.strip()
         if line_strip.startswith("Time: "):

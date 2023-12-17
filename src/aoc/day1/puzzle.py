@@ -42,8 +42,7 @@ def _str_to_digits(line: str) -> str:
 
 def extract_numbers(puzzle: str, convert_str: bool = False) -> list[int]:
     numbers = []
-    puzzle = puzzle.strip()
-    for line in puzzle.splitlines():
+    for line in puzzle.strip().splitlines():
         if convert_str:
             numbers_str = _str_to_digits(line)
         else:

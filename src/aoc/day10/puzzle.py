@@ -21,9 +21,8 @@ def _pipe_to_nodes(pipe: str, node: tuple[int, int]) -> list[tuple[int, int]]:
 
 
 def parse_puzzle(puzzle: str) -> tuple[tuple[int, int], dict[tuple[int, int], list[tuple[int, int]]], tuple[int, int]]:
-    puzzle = puzzle.strip()
     graph: dict[tuple[int, int], list[tuple[int, int]]] = defaultdict(list)
-    lines = puzzle.splitlines()
+    lines = puzzle.strip().splitlines()
     for row, line in enumerate(lines):
         line_strip = line.strip()
         for col, pipe in enumerate(line_strip):
@@ -55,7 +54,7 @@ def _find_path(
                 continue
 
             # Add node to path
-            new_path = list(path)
+            new_path = path.copy()
             new_path.append(next_node)
             queue.append(new_path)
 
@@ -63,7 +62,7 @@ def _find_path(
             if next_node == goal_node:
                 return new_path
 
-        # Mark node as visited
+        # Mark node as explored
         explored.append(node)
 
     return []
