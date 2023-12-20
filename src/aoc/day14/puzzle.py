@@ -88,6 +88,49 @@ def calculate_load(rows: list[str]) -> int:
     return load
 
 
+def spin_cycle(num_cycles: int, rows: list[str], cols: list[str]) -> tuple[list[str], list[str]]:
+    # Define directions
+    directions = "NWSE"
+    directions_len = len(directions)
+
+    # Spin cycle and break when a loop is detected
+    cycle = 0
+    cycles: dict[tuple[tuple[str, ...], tuple[str, ...]], list[int]] = defaultdict(list)
+    loop_start = None
+    for i in range(num_cycles * directions_len):
+        # Roll
+        direction = directions[i % directions_len]
+        rows, cols = roll(direction, rows, cols)
+
+        # Track cycles
+        if i % directions_len == directions_len - 1:  # a cycle completed
+            cycle_rows = tuple(rows)
+            cycle_cols = tuple(cols)
+            cycles_key = (cycle_rows, cycle_cols)
+            if len(cycles[cycles_key]) > 0:
+                loop_start = cycles_key
+                break
+            else:
+                cycles[(cycle_rows, cycle_cols)].append(cycle)
+            cycle += 1
+
+    # Use loop information
+    if loop_start is not None:
+        # Get loop sequence
+        keys = list(cycles.keys())
+        loop_idx = keys.index(loop_start)
+        loop_keys = keys[loop_idx::]
+
+        # Determine where we end up in the loop sequence
+        loop_cycles = num_cycles - loop_idx - 1  # exclude non-looping cycles; -1 is because we started a loop already
+        loop_keys_len = len(loop_keys)
+        final_key_idx = loop_cycles % loop_keys_len
+        final_key = loop_keys[final_key_idx]
+        rows, cols = list(final_key[0]), list(final_key[1])
+
+    return rows, cols
+
+
 def solve_puzzle1(puzzle: str) -> int:
     rows, cols = parse_puzzle(puzzle)
     rows, cols = roll("N", rows, cols)
@@ -98,11 +141,7 @@ def solve_puzzle1(puzzle: str) -> int:
 
 def solve_puzzle2(puzzle: str) -> int:
     rows, cols = parse_puzzle(puzzle)
-    directions = "NWSE"
-    directions_len = len(directions)
-    for i in range(1000000000):
-        direction = directions[i % directions_len]
-        rows, cols = roll(direction, rows, cols)
+    rows, cols = spin_cycle(1000000000, rows, cols)
     answer = calculate_load(rows)
     print(f"Answer: {answer}")
     return answer
@@ -111,4 +150,4 @@ def solve_puzzle2(puzzle: str) -> int:
 if __name__ == "__main__":  # pragma: no cover
     puzzle = load_puzzle("puzzle.txt")
     assert solve_puzzle1(puzzle) == 103333
-    # assert solve_puzzle2(puzzle) ==
+    assert solve_puzzle2(puzzle) == 97241
