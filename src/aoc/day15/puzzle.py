@@ -37,20 +37,20 @@ def get_boxes(vals: list[str]) -> dict[int, dict[str, int]]:
     return {k: v for k, v in boxes.items() if len(v) > 0}
 
 
-def solve_puzzle1(puzzle: str) -> int:
-    vals = parse_puzzle(puzzle)
-    hashes = hash_vals(vals)
-    answer = sum(hashes)
-    print(f"Answer: {answer}")
-    return answer
-
-
 def calculate_power(boxes: dict[int, dict[str, int]]) -> int:
     power = 0
     for box, vals in boxes.items():
         for slot, length in enumerate(vals.values()):
             power += (box + 1) * (slot + 1) * length
     return power
+
+
+def solve_puzzle1(puzzle: str) -> int:
+    vals = parse_puzzle(puzzle)
+    hashes = hash_vals(vals)
+    answer = sum(hashes)
+    print(f"Answer: {answer}")
+    return answer
 
 
 def solve_puzzle2(puzzle: str) -> int:
