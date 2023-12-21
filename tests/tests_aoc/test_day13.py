@@ -2,7 +2,7 @@ from aoc.day13 import puzzle as p
 
 
 def test_puzzle():
-    # Define puzzles
+    # Define puzzle
     puzzle = """
         #.##..##.
         ..#.##.#.
