@@ -8,7 +8,6 @@ def parse_puzzle(puzzle: str) -> list[list[int]]:
 
 
 def minimal_heat(costs: list[list[int]], start: tuple[int, int], end: tuple[int, int], least: int, most: int) -> int:
-    """This is a somewhat bruce-force approach."""
     num_rows = len(costs)
     num_cols = len(costs[0])
     queue = [(0, start, (0, 0))]
