@@ -21,54 +21,28 @@ def test_puzzle():
     """
 
     # Test helpers
-    edges, size = p.parse_puzzle(puzzle)
-    assert edges == [
-        (0, 0),
-        (0, 1),
-        (0, 2),
-        (0, 3),
-        (0, 4),
-        (0, 5),
+    vertices = p.parse_puzzle1(puzzle)
+    assert vertices == [
         (0, 6),
-        (1, 6),
-        (2, 6),
-        (3, 6),
-        (4, 6),
         (5, 6),
-        (5, 5),
         (5, 4),
-        (6, 4),
         (7, 4),
-        (7, 5),
         (7, 6),
-        (8, 6),
         (9, 6),
-        (9, 5),
-        (9, 4),
-        (9, 3),
-        (9, 2),
         (9, 1),
-        (8, 1),
         (7, 1),
         (7, 0),
-        (6, 0),
         (5, 0),
-        (5, 1),
         (5, 2),
-        (4, 2),
-        (3, 2),
         (2, 2),
-        (2, 1),
         (2, 0),
-        (1, 0),
         (0, 0),
     ]
-    assert size == (10, 7)
 
     # Assert puzzle 1
     answer1 = p.solve_puzzle1(puzzle)
     assert answer1 == 62
 
     # Assert puzzle 2
-    # answer2 = p.solve_puzzle2(puzzle)
-    # assert answer2 == 94
+    answer2 = p.solve_puzzle2(puzzle)
+    assert answer2 == 952408144115
