@@ -3,7 +3,7 @@ from aoc.day18 import puzzle as p
 
 def test_puzzle():
     # Define puzzle
-    puzzle = r"""
+    puzzle = """
         R 6 (#70c710)
         D 5 (#0dc571)
         L 2 (#5713f0)

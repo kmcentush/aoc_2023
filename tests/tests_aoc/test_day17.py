@@ -3,7 +3,7 @@ from aoc.day17 import puzzle as p
 
 def test_puzzle():
     # Define puzzle
-    puzzle = r"""
+    puzzle = """
         2413432311323
         3215453535623
         3255245654254

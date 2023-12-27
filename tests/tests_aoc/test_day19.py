@@ -3,7 +3,7 @@ from aoc.day19 import puzzle as p
 
 def test_puzzle():
     # Define puzzle
-    puzzle = r"""
+    puzzle = """
         px{a<2006:qkq,m>2090:A,rfg}
         pv{a>1716:R,A}
         lnx{m>1548:A,A}
