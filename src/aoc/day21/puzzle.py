@@ -1,5 +1,3 @@
-import operator
-from functools import reduce
 from typing import TYPE_CHECKING
 
 from aoc.utils import load_puzzle
@@ -82,14 +80,12 @@ def step(
     return plots
 
 
-def lagrange_interpolate(x: float, x_values: "Sequence[float]", y_values: "Sequence[float]") -> float:
-    k = len(x_values)
-
-    def _basis(j):
-        p = [(x - x_values[m]) / (x_values[j] - x_values[m]) for m in range(k) if m != j]
-        return reduce(operator.mul, p)
-
-    return sum(_basis(j) * y_values[j] for j in range(k))
+def quad(y: "Sequence[float]", x: float) -> float:
+    # Use the quadratic formula to find the output at the large steps based on the first three data points
+    a = (y[2] - (2 * y[1]) + y[0]) // 2
+    b = y[1] - y[0] - a
+    c = y[0]
+    return (a * x**2) + (b * x) + c
 
 
 def solve_puzzle1(puzzle: str, max_steps: int) -> int:
@@ -101,31 +97,23 @@ def solve_puzzle1(puzzle: str, max_steps: int) -> int:
 
 
 def solve_puzzle2(puzzle: str, max_steps: int) -> int:
-    """
-    Why the Lagrange polynomial?
-    https://www.reddit.com/r/adventofcode/comments/18oh5f7/2023_day_21_part_2_how_does_the_solution_work/
+    """T
+    his is incredibly tricky. I would never have figured this out.
 
-    This is incredibly tricky. I would never have figured this out.
+    https://www.reddit.com/r/adventofcode/comments/18nevo3/comment/keaiiq7/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
     """
     # Get grid
     grid, start = parse_puzzle(puzzle)
     assert len(grid) == len(grid[0])  # square
 
-    # Get plots; use the grid size as the repeating unit
-    num_rows = len(grid)
-    steps = [start[0], start[0] + num_rows, start[0] + 2 * num_rows]  # distance to edge; + repeat, + 2 * repeat
+    # Get first three plot counts
+    size = len(grid)
+    edge = size // 2
+    steps = [edge + i * size for i in range(3)]  # need three points to fit a quadratic
     num_plots = [len(step(grid, start, s, allow_infinite=True)) for s in steps]
-    centered = [s - start[0] for s in steps]  # remove start offset
 
-    # Solve with Lagrange interpolation
-    lag_steps = start[0]
-    lag_num_plots = float(num_plots[0])
-    while lag_steps < max_steps:
-        lag_steps += num_rows
-        lag_num_plots = lagrange_interpolate(lag_steps - start[0], centered, num_plots)
-    assert lag_steps == max_steps  # will be true given the smart decision of step sizes
-    assert lag_num_plots == int(lag_num_plots)
-    answer = int(lag_num_plots)
+    # Fit and use quadratic
+    answer = int(quad(num_plots, ((max_steps - edge) // size)))
     print(f"Answer: {answer}")
     return answer
 
